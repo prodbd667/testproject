@@ -107,12 +107,16 @@ app.get('/table', checkAuth, function (req, res) {
   console.log(req.session.role);
   switch (req.session.role) {
     case 'role_first':
-      res.send('first')
+      connection.query('SELECT * FROM records', function (err, rows, fields) {
+        if (err) throw err;
+
+        res.render('f_r_table', { role: 'first role', records: rows })
+      })
       break
     case 'role_second':
       connection.query('SELECT * FROM records', function (err, rows, fields) {
         if (err) throw err;
-        console.log(rows);
+
         rating = [1, 2, 3, 4, 5];
         res.render('s_r_table', { role: 'second role', records: rows })
       })
@@ -125,14 +129,43 @@ app.get('/table', checkAuth, function (req, res) {
 
 
 app.post('/table/voting', function (req, res) {
-// var sqlQuery = ;
+  // var sqlQuery = ;
 
-console.log(req.body);
+  console.log(req.body);
   connection.query("UPDATE records SET ? WHERE ?", [{ evaluation: req.body.evaluation }, { id: req.body.id }], function (error, data) {
     if (error) throw error;
 
     res.json(data);
   });
+});
+
+
+
+
+
+app.get('/table/edit/:id', function (req, res) {
+  // var sqlQuery = ;
+
+  console.log(req.params);
+  // connection.query("UPDATE records SET ? WHERE ?", [{ evaluation: req.body.evaluation }, { id: req.body.id }], function (error, data) {
+  //   if (error) throw error;
+
+  //   res.json(data);
+  // });
+
+
+  var id = req.params.id;
+  console.log(id);
+  // req.getConnection(function (err, connection) {
+  connection.query('SELECT * FROM records WHERE id = ?', [id], function (err, row) {
+    console.log('row', row[0]);
+    if (err)
+      console.log("Error Selecting : %s ", err);
+    res.render('edit_customer', { page_title: "Edit Customers - Node.js", record: row[0] });
+  });
+  // });
+
+
 });
 
 

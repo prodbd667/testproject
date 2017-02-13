@@ -1,6 +1,6 @@
 module.exports = function(req, res, next) {
     if (!req.session.role) {
-        return next('(((((');
+        res.redirect('/login');
     }
     next();
 }

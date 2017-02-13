@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    div #{role}
+    div
+    table(id='records')
+        thead
+            tr
+                th вопрос
+                th ответ
+                th голосование
+                th
+        tbody
+            each record, i in records
+                tr
+                    td #{record.question}
+                    td #{record.solution}
+                    td #{record.evaluation}
+                    td
+                        div
+                            a.a-inside.a-edit(href='/table/edit/#{record.id}') Edit
+                            a.a-inside.a-delete(href='/table/delete/#{record.id}') Delete
