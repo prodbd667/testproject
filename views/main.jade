@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  form.form(method='post', action='/')
+    input(type='text', value='log' name='login', placeholder='логин')
+    input(type='password', value='pass' name='password', placeholder='пароль')
+    button(type='submit') войти

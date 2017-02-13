@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    div #{role}
+    div
+    table
+        //- thead
+        //- tr: th Posts
+        //- tbody
+        each record, i in records
+            tr
+                td #{record.question}
+                td #{record.solution}
+                td 
+                    form(id='#{i}')
+                        each q in rating
+                            if q == record.evaluation 
+                                input(type='radio', name='#{i+1}', value='#{q}', checked='checked')
+                            else
+                                input(type='radio', name='#{i+1}', value='#{q}')
