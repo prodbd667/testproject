@@ -12,7 +12,7 @@ block content
                 td #{record.question}
                 td #{record.solution}
                 td 
-                    form(id='#{i}')
+                    form(id='#{i+1}')
                         each q in rating
                             if q == record.evaluation 
                                 input(type='radio', name='#{i+1}', value='#{q}', checked='checked')

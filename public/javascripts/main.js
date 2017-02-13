@@ -2,23 +2,18 @@ $(function () {
     console.log('init');
     $('input[type=radio]').change(function () {
         var value = $(this).val();
+        var elemId = parseInt($(this).parent().attr('id')); 
+
         console.log(value);
+        console.log(parseInt($(this).parent().attr('id')));
 
 
         $.post(
-            '/object/updateRating.php',
-            { value: cur, objectid: objectid },
+            '/table/voting',
+            { evaluation: value, id: elemId },
             function (data) {
                 if (data) {
-                    // Если данные добавились в БД возвращаем общий рейтинг
-                    $(".object .param.rating .value").html(data);
-                    // Убираем из виду звезды рейтинга
-                    $(".object_params").remove();
-                    // Выдаем сообщение пользователю
-                    $("#alert p").html('Ваш голос учтён, спасибо за голосование.');
-                    $("#alert")
-                        .dialog('option', 'title', 'Голос учтён')
-                        .dialog('open');
+                    console.log(data);
                 }
             }
         );

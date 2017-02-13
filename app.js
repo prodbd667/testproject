@@ -14,6 +14,8 @@ var users = require('./routes/users');
 
 var app = express();
 
+var checkAuth = require('./middleware/checkAuth');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -65,13 +67,18 @@ connection.connect(function (err) {
 //   });
 // }
 
-
 app.get('/', function (req, res) {
+  res.render('hello');
+});
+
+
+
+app.get('/login', function (req, res) {
   res.render('main');
 });
 
 
-app.post('/', function (req, res) {
+app.post('/login', function (req, res) {
 
   if (!req.body.login || !req.body.password) {
     return res.status(400).send("You must send the username and the password");
@@ -96,7 +103,7 @@ app.post('/', function (req, res) {
 
 });
 
-app.get('/table', function (req, res) {
+app.get('/table', checkAuth, function (req, res) {
   console.log(req.session.role);
   switch (req.session.role) {
     case 'role_first':
@@ -106,7 +113,7 @@ app.get('/table', function (req, res) {
       connection.query('SELECT * FROM records', function (err, rows, fields) {
         if (err) throw err;
         console.log(rows);
-        rating = [1,2,3,4,5];
+        rating = [1, 2, 3, 4, 5];
         res.render('s_r_table', { role: 'second role', records: rows })
       })
       break
@@ -114,6 +121,18 @@ app.get('/table', function (req, res) {
       console.log('test');
       break
   }
+});
+
+
+app.post('/table/voting', function (req, res) {
+// var sqlQuery = ;
+
+console.log(req.body);
+  connection.query("UPDATE records SET ? WHERE ?", [{ evaluation: req.body.evaluation }, { id: req.body.id }], function (error, data) {
+    if (error) throw error;
+
+    res.json(data);
+  });
 });
 
 
