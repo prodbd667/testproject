@@ -60,6 +60,7 @@ app.use(cookieParser());
 //     maxAge: null
 //   }
 // }));
+
 app.use(session({
   key: 'session_cookie_name',
   secret: 'session_cookie_secret',

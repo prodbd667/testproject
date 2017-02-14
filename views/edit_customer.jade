@@ -10,7 +10,8 @@ block content
                 form.form
                     div.form-group
                         label(for="questionInput") вопрос
-                        input(id='questionInput' value='#{record.question}')
+                        input.form-control(id='questionInput', type='text', name='question', value='#{record.question}')
                     div.form-group
                         label(for="solutionInput") решение
-                        input(id='solutionInput' value='#{record.solution}')
+                        input.form-control(id='solutionInput', type='text', name='solution', value='#{record.solution}')
+                    button.btn.btn-default(id='save', type='button') сохранить

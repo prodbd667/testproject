@@ -18,7 +18,9 @@ $(function () {
                 }
             }
         );
+    });
 
-
+    $('#save').on('click', function(){
+        console.log('save');
     });
 });
