@@ -1,7 +1,14 @@
 extends layout
 
 block content
-  form.form(method='post', action='/login')
-    input(type='text', value='log' name='login', placeholder='логин')
-    input(type='password', value='pass' name='password', placeholder='пароль')
-    button(type='submit') войти
+  div.container
+    div.row
+      div.col-md-6
+        form.form(method='post', action='/login')
+          div.form-group
+            label(for="loginInput") логин
+            input.form-control(id='loginInput' type='text', value='log' name='login', placeholder='логин')
+          div.form-group
+            label(for="passwordInput") пароль
+            input.form-control(id='passwordInput' type='password', value='pass' name='password', placeholder='пароль')
+          button.btn.btn-default(type='submit') войти

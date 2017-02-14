@@ -1,7 +1,12 @@
 extends layout
 
 block content
-    p #{page_title}
-    form.form(method='post', action='/table/edit/:id')
-        label вопрос
-        input(value='#{record.question}')
+    div.container
+        div.row
+            div.col-md-6
+                p #{page_title}
+        div.row
+            div.col-md-6
+                form.form(method='post', action='/table/edit/:id')
+                    label вопрос
+                    input(value='#{record.question}')

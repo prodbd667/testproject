@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var mysql = require('mysql');
 
+var MySQLStore = require('express-mysql-session')(session);
 var config = require('./config/config');
 
 var index = require('./routes/index');
@@ -16,9 +17,30 @@ var app = express();
 
 var checkAuth = require('./middleware/checkAuth');
 
+
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+var options = {
+  host: config.dbmysql.host,
+  port: 3306,
+  user: config.dbmysql.user,
+  password: config.dbmysql.password,
+  database: config.dbmysql.database,
+  schema: {
+    tableName: 'custom_sessions_table_name',
+    columnNames: {
+      session_id: 'custom_session_id',
+      expires: 'custom_expires_column_name',
+      data: 'custom_data_column_name'
+    }
+  }
+};
+var sessionStore = new MySQLStore(options);
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -27,16 +49,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// app.use(session({
+//   secret: 'testproject',
+//   resave: false,
+//   saveUninitialized: true,
+//   cookie: {
+//     path: '/',
+//     httpOnly: true,
+//     secure: false,
+//     maxAge: null
+//   }
+// }));
 app.use(session({
-  secret: 'testproject',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    maxAge: null
-  }
+  key: 'session_cookie_name',
+  secret: 'session_cookie_secret',
+  store: sessionStore,
+  resave: true,
+  saveUninitialized: true
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -68,10 +97,55 @@ connection.connect(function (err) {
 // }
 
 app.get('/', function (req, res) {
-  res.render('hello');
+  console.log('req.session', req.session);
+  console.log('res.session', res.session);
+  if (req.session.role) {
+    res.redirect('/table');
+  } else {
+    res.redirect('/login');
+  }
+  // res.render('hello');
+});
+// *************************************************************
+app.get('/logout', function (req, res) {
+  req.session.destroy(function () {
+    res.redirect('/login');
+  });
 });
 
+var mysql = require('promise-mysql');
+var connection;
 
+
+
+app.get('/testmysql', function (req, res) {
+  var id = 1;
+  mysql.createConnection({
+    host: config.dbmysql.host,
+    user: config.dbmysql.user,
+    password: config.dbmysql.password,
+    database: config.dbmysql.database
+  }).then(function (conn) {
+    connection = conn;
+
+    return connection.query('select * from records where `id`="' + id + '"');
+  }).then(function (rows) {
+    // Query the items for a ring that Frodo owns. 
+    // UPDATE records SET ? WHERE ?
+    console.log('rows 1', rows);
+    return connection.query('update records set `edit`="' + 1 + '" where `id`="' + rows[0].id + '"');
+  }).then(function (rows) {
+    // Logs out a ring that Frodo owns 
+
+    console.log('rows 2', rows);
+    res.send('successful');
+  }).catch(function (error) {
+    //logs out the error 
+    res.send('unsuccessful');
+    console.log(error);
+  });
+});
+// *************************************************************
 
 app.get('/login', function (req, res) {
   res.render('main');

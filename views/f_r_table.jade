@@ -1,22 +1,29 @@
 extends layout
 
 block content
-    div #{role}
-    div
-    table(id='records')
-        thead
-            tr
-                th вопрос
-                th ответ
-                th голосование
-                th
-        tbody
-            each record, i in records
-                tr
-                    td #{record.question}
-                    td #{record.solution}
-                    td #{record.evaluation}
-                    td
-                        div
-                            a.a-inside.a-edit(href='/table/edit/#{record.id}') Edit
-                            a.a-inside.a-delete(href='/table/delete/#{record.id}') Delete
+    div.container
+        div.row
+            div.col-md-8
+                div.panel.panel-default 
+                    div.panel-body #{role}
+            div.col-md-4
+                a(href='/logout') выход
+        div.row
+            div.col-md-12
+                table.table(id='records')
+                    thead
+                        tr
+                            th вопрос
+                            th ответ
+                            th голосование
+                            th
+                    tbody
+                        each record, i in records
+                            tr
+                                td #{record.question}
+                                td #{record.solution}
+                                td #{record.evaluation}
+                                td
+                                    div
+                                        a.btn.btn-default.a-inside.a-edit(href='/table/edit/#{record.id}') Edit
+                                        a.btn.btn-default.a-inside.a-delete(href='/table/delete/#{record.id}') Delete
