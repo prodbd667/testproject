@@ -7,6 +7,10 @@ block content
                 p #{page_title}
         div.row
             div.col-md-6
-                form.form(method='post', action='/table/edit/:id')
-                    label вопрос
-                    input(value='#{record.question}')
+                form.form
+                    div.form-group
+                        label(for="questionInput") вопрос
+                        input(id='questionInput' value='#{record.question}')
+                    div.form-group
+                        label(for="solutionInput") решение
+                        input(id='solutionInput' value='#{record.solution}')
