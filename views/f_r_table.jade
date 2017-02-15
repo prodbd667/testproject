@@ -22,7 +22,13 @@ block content
                             tr
                                 td #{record.question}
                                 td #{record.solution}
-                                td #{record.evaluation}
+                                td
+                                    //- each j in n
+                                    //-     i.fa.fa-star
+                                    each q in rating
+                                        i.q #{q}
+                                
+                                //- td #{record.evaluation}
                                 td
                                     div
                                         a.btn.btn-default.a-inside.a-edit(href='/table/edit/#{record.id}') Edit

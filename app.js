@@ -182,6 +182,8 @@ app.get('/table', checkAuth, function (req, res) {
       connection.query('SELECT * FROM records', function (err, rows, fields) {
         if (err) throw err;
 
+
+        rating = [1, 2, 3, 4, 5];
         res.render('f_r_table', { role: 'first role', records: rows })
       })
       break
