@@ -107,26 +107,23 @@ app.get('/', function (req, res) {
   }
   // res.render('hello');
 });
-// *************************************************************
 app.get('/logout', function (req, res) {
   req.session.destroy(function () {
     res.redirect('/login');
   });
 });
-
+// *************************************************************
 var mysql = require('promise-mysql');
 var connection;
-
-
-
+var mysqlconnect = mysql.createConnection({
+  host: config.dbmysql.host,
+  user: config.dbmysql.user,
+  password: config.dbmysql.password,
+  database: config.dbmysql.database
+});
 app.get('/testmysql', function (req, res) {
   var id = 1;
-  mysql.createConnection({
-    host: config.dbmysql.host,
-    user: config.dbmysql.user,
-    password: config.dbmysql.password,
-    database: config.dbmysql.database
-  }).then(function (conn) {
+  mysqlconnect.then(function (conn) {
     connection = conn;
 
     return connection.query('select * from records where `id`="' + id + '"');
@@ -214,10 +211,6 @@ app.post('/table/voting', function (req, res) {
   });
 });
 
-
-
-
-
 app.get('/table/edit/:id', function (req, res) {
   // var sqlQuery = ;
 
@@ -242,6 +235,28 @@ app.get('/table/edit/:id', function (req, res) {
 
 
 });
+
+
+app.post('/table/edit', function (req, res) {
+  console.log('req.body', req.body);
+
+  var id = req.body.id;
+  var question = req.body.question;
+  var solution = req.body.solution;
+  mysqlconnect.then(function (conn) {
+    connection = conn;
+
+    // return connection.query('select * from records where `id`="' + id + '"');
+    return connection.query('update records set `question`="' + question + '",`solution`="' + solution + '" where `id`="' + id + '"');
+  }).then(function (rows) {
+    console.log('rows 2', rows);
+    res.json('_successful_');
+  }).catch(function (error) {
+    //logs out the error 
+    res.send('unsuccessful');
+    console.log(error);
+  });
+})
 
 
 app.get('/test', function (req, res) {
