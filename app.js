@@ -149,7 +149,6 @@ app.get('/login', function (req, res) {
   res.render('main');
 });
 
-
 app.post('/login', function (req, res) {
 
   if (!req.body.login || !req.body.password) {
@@ -199,7 +198,6 @@ app.get('/table', checkAuth, function (req, res) {
   }
 });
 
-
 app.post('/table/voting', function (req, res) {
   // var sqlQuery = ;
 
@@ -236,7 +234,6 @@ app.get('/table/edit/:id', function (req, res) {
 
 });
 
-
 app.post('/table/edit', function (req, res) {
   console.log('req.body', req.body);
 
@@ -256,8 +253,29 @@ app.post('/table/edit', function (req, res) {
     res.send('unsuccessful');
     console.log(error);
   });
-})
+});
 
+app.get('/table/create', function (req, res) {
+  res.render('create');
+});
+
+app.post('/table/create', function (req, res) {
+  console.log('/table/create', req.body);
+
+  var question = req.body.question;
+  var solution = req.body.solution;
+  mysqlconnect.then(function (conn) {
+    connection = conn;
+    
+    return connection.query('insert into records set `question`="' + question + '",`solution`="' + solution + '"');
+  }).then(function (rows) {
+    res.json('_successful_');
+  }).catch(function (error) {
+    //logs out the error 
+    res.send('unsuccessful');
+    console.log(error);
+  });
+});
 
 app.get('/test', function (req, res) {
   // req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;

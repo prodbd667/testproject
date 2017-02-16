@@ -38,6 +38,21 @@ $(function () {
         );
     });
 
+    $('#create-form button').on('click', function () {
+        console.log('create');
+        var question = $('#questionInput').val();
+        var solution = $('#solutionInput').val();
+        $.post(
+            '/table/create',
+            {question: question, solution: solution },
+            function (data) {
+                if (data) {
+                    console.log(data);
+                }
+            }
+        );
+    });
+
     
 
 });
