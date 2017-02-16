@@ -166,8 +166,6 @@ app.post('/login', function (req, res) {
       return res.status(401).send("The username or password don't match");
     }
 
-
-
     req.session.role = rows[0].role;
     res.status(201).redirect('/table');
 
@@ -183,16 +181,16 @@ app.get('/table', checkAuth, function (req, res) {
         if (err) throw err;
 
 
-        rating = [1, 2, 3, 4, 5];
-        res.render('f_r_table', { role: 'first role', records: rows })
+        rating = [5, 4, 3, 2, 1];
+        res.render('f_r_table', { role: 'first role', records: rows, rating: rating })
       })
       break
     case 'role_second':
       connection.query('SELECT * FROM records', function (err, rows, fields) {
         if (err) throw err;
 
-        rating = [1, 2, 3, 4, 5];
-        res.render('s_r_table', { role: 'second role', records: rows })
+        rating = [5, 4, 3, 2, 1];
+        res.render('s_r_table', { role: 'second role', records: rows, rating: rating })
       })
       break
     default:

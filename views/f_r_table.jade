@@ -25,8 +25,12 @@ block content
                                 td
                                     //- each j in n
                                     //-     i.fa.fa-star
-                                    each q in rating
-                                        i.q #{q}
+                                    div.rating--view
+                                        each q in rating
+                                            if q == record.evaluation 
+                                                label(for='star#{i+1}--#{q}', class='full active', title="Awesome - #{q} stars")
+                                            else
+                                                label(for='star#{i+1}--#{q}', class='full', title="Awesome - #{q} stars")
                                 
                                 //- td #{record.evaluation}
                                 td

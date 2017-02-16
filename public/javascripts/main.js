@@ -14,7 +14,8 @@ $(function () {
             { evaluation: value, id: elemId },
             function (data) {
                 if (data) {
-                    console.log(data);
+                    $('.status .successful').text('successful');
+                    setTimeout(function(){$('.status .successful').text('')},1000);
                 }
             }
         );
@@ -36,5 +37,7 @@ $(function () {
             }
         );
     });
+
+    
 
 });
